@@ -23,7 +23,7 @@ struct RecordRow: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading) {
             // 日期
             Text(formattedDate)
                 .font(.subheadline)
@@ -74,7 +74,7 @@ struct RecordRow: View {
                 }
             }
         }
-        .padding(.vertical, 6)
+        .frame(height: 60)
         .sheet(isPresented: $showingCheckInPicker) {
             TimePickerSheet(
                 title: "修改签到时间",
@@ -106,13 +106,13 @@ struct RecordRow: View {
     }
 }
 
-//#Preview {
-//    RecordRow(
-//        record: TimeRecord(
-//            date: Date(),
-//            checkInTime: Date(),
-//            checkOutTime: Date()
-//        )
-//    )
-//    .padding()
-//} 
+#Preview {
+    RecordRow(
+        record: TimeRecord(
+            date: Date(),
+            checkInTime: Date(),
+            checkOutTime: Date()
+        )
+    )
+    .padding()
+} 

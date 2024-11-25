@@ -19,14 +19,21 @@ struct ContentView: View {
     }
     
     var dateRange: (start: Date, end: Date) {
-        let calendar = Calendar.current
+        let calendar = Calendar(identifier: .iso8601)
+        
         switch selectedType {
         case .week:
+            // 使用 dateInterval 获取准确的周范围
+            if let weekInterval = calendar.dateInterval(of: .weekOfYear, for: selectedDate) {
+                return (weekInterval.start, weekInterval.end)
+            }
+            // 如果获取失败，使用备用方案
             let weekday = calendar.component(.weekday, from: selectedDate)
             let mondayOffset = weekday == 1 ? -6 : -(weekday - 2)
             let weekStart = calendar.date(byAdding: .day, value: mondayOffset, to: selectedDate)!
             let weekEnd = calendar.date(byAdding: .day, value: 7, to: weekStart)!
             return (weekStart, weekEnd)
+            
         case .month:
             let components = calendar.dateComponents([.year, .month], from: selectedDate)
             let monthStart = calendar.date(from: components)!
@@ -36,8 +43,11 @@ struct ContentView: View {
     }
     
     var filteredRecords: [TimeRecord] {
-        allRecords.filter { record in
-            record.date >= dateRange.start && record.date < dateRange.end
+        let calendar = Calendar(identifier: .iso8601)
+        
+        return allRecords.filter { record in
+            // 确保日期在范围内
+            return record.date >= dateRange.start && record.date < dateRange.end
         }
     }
     
@@ -77,13 +87,15 @@ struct ContentView: View {
                         }
                     } label: {
                         Image(systemName: "ellipsis.circle")
+                            .font(.system(size: 17))
                             .foregroundStyle(.primary)
                     }
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: { showingSettings = true }) {
-                        Image(systemName: "gearshape.fill")
+                        Image(systemName: "gearshape")
+                            .font(.system(size: 17))
                             .foregroundStyle(.primary)
                     }
                 }

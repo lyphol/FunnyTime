@@ -21,7 +21,7 @@ struct AppIconPreview: View {
             // 滑稽表情
             ZStack {
                 // 眼睛（时钟样式）
-                HStack(spacing: 160) {
+                HStack(spacing: 180) {
                     TimeEye(rotation: 45, isDark: isDark)
                     TimeEye(rotation: -45, isDark: isDark)
                 }
@@ -47,15 +47,15 @@ struct AppIconPreview: View {
                 .rotationEffect(.degrees(180))
                 
                 // 腮红
-                HStack(spacing: 400) {
+                HStack(spacing: 460) {
                     Circle()
                         .fill(isDark ? IconColors.darkCheeks : IconColors.lightCheeks)
-                        .frame(width: 100, height: 100)
+                        .frame(width: 120, height: 120)
                     Circle()
                         .fill(isDark ? IconColors.darkCheeks : IconColors.lightCheeks)
-                        .frame(width: 100, height: 100)
+                        .frame(width: 120, height: 120)
                 }
-                .offset(y: 50)
+                .offset(y: 80)
             }
             .frame(width: 600, height: 600)
         }

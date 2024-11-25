@@ -41,12 +41,9 @@ struct RecordsCard: View {
                 List {
                     ForEach(records) { record in
                         RecordRow(record: record)
-                            .listRowInsets(EdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20))
-                            .listRowSeparator(.visible)
-                            .listRowBackground(
-                                RoundedRectangle(cornerRadius: 20)
-                                    .fill(ColorTheme.background)
-                            )
+                            .listRowInsets(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
+                            .listRowSeparator(.automatic)
+                            .listRowBackground(ColorTheme.background)
                             .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                                 Button(role: .destructive) {
                                     recordToDelete = record
@@ -59,6 +56,7 @@ struct RecordsCard: View {
                 .listStyle(.plain)
                 .scrollContentBackground(.hidden)
                 .frame(height: max(CGFloat(records.count) * 70, 70))
+                .clipShape(RoundedRectangle(cornerRadius: 20))
             }
         }
         .background(

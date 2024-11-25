@@ -20,12 +20,12 @@ struct TimeEye: View {
                         startPoint: .top,
                         endPoint: .bottom
                     ),
-                    lineWidth: 20
+                    lineWidth: 25
                 )
-                .frame(width: 120, height: 120)
+                .frame(width: 150, height: 150)
             
             // 时针（眼珠）
-            RoundedRectangle(cornerRadius: 5)
+            RoundedRectangle(cornerRadius: 6)
                 .fill(
                     LinearGradient(
                         colors: isDark ? [
@@ -39,8 +39,8 @@ struct TimeEye: View {
                         endPoint: .bottom
                     )
                 )
-                .frame(width: 10, height: 50)
-                .offset(y: -20)
+                .frame(width: 14, height: 65)
+                .offset(y: -25)
                 .rotationEffect(.degrees(rotation))
         }
     }

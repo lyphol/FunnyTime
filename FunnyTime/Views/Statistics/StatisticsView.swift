@@ -9,13 +9,23 @@ struct StatisticsView: View {
     @Binding var selectedDate: Date
     
     private var dateRange: (start: Date, end: Date) {
-        let calendar = Calendar.current
+        var calendar = Calendar(identifier: .iso8601)
+        calendar.locale = Locale(identifier: "zh_CN")
+        calendar.firstWeekday = 2
+        
         switch selectedType {
         case .week:
-            let weekday = calendar.component(.weekday, from: selectedDate)
-            let mondayOffset = weekday == 1 ? -6 : -(weekday - 2)
-            let weekStart = calendar.date(byAdding: .day, value: mondayOffset, to: selectedDate)!
+            let weekOfYear = calendar.component(.weekOfYear, from: selectedDate)
+            let year = calendar.component(.year, from: selectedDate)
+            
+            var components = DateComponents()
+            components.year = year
+            components.weekOfYear = weekOfYear
+            components.weekday = 2
+            
+            let weekStart = calendar.date(from: components)!
             let weekEnd = calendar.date(byAdding: .day, value: 7, to: weekStart)!
+            
             return (weekStart, weekEnd)
         case .month:
             let components = calendar.dateComponents([.year, .month], from: selectedDate)
@@ -34,17 +44,22 @@ struct StatisticsView: View {
     }
     
     private func getDailyStats() -> [(date: Date, hours: Double)] {
-        let calendar = Calendar.current
+        var calendar = Calendar(identifier: .iso8601)
+        calendar.locale = Locale(identifier: "zh_CN")
+        calendar.firstWeekday = 2
+        
         var result: [(Date, Double)] = []
         var currentDate = dateRange.start
         
         while currentDate < dateRange.end {
-            let year = calendar.component(.yearForWeekOfYear, from: currentDate)
-            let week = calendar.component(.weekOfYear, from: currentDate)
+            let weekOfYear = calendar.component(.weekOfYear, from: currentDate)
+            let year = calendar.component(.year, from: currentDate)
             let weekday = calendar.component(.weekday, from: currentDate)
             let adjustedWeekday = weekday == 1 ? 7 : weekday - 1
             
-            let isWorkday = weeklyWorkdays.first(where: { $0.year == year && $0.week == week })?.workdays.contains(adjustedWeekday) ?? (1...5).contains(adjustedWeekday)
+            let isWorkday = weeklyWorkdays.first(where: { 
+                $0.year == year && $0.week == weekOfYear 
+            })?.workdays.contains(adjustedWeekday) ?? (1...5).contains(adjustedWeekday)
             
             let dayRecords = records.filter { record in
                 calendar.isDate(record.date, inSameDayAs: currentDate)
@@ -66,13 +81,18 @@ struct StatisticsView: View {
     }
     
     var periodTitle: String {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "zh_CN")
+        var calendar = Calendar(identifier: .iso8601)
+        calendar.locale = Locale(identifier: "zh_CN")
+        calendar.firstWeekday = 2
+        
         switch selectedType {
         case .week:
-            formatter.dateFormat = "yyyy年第w周"
-            return formatter.string(from: selectedDate)
+            let weekOfYear = calendar.component(.weekOfYear, from: selectedDate)
+            let year = calendar.component(.year, from: selectedDate)
+            return "\(year)年第\(weekOfYear)周"
         case .month:
+            let formatter = DateFormatter()
+            formatter.locale = Locale(identifier: "zh_CN")
             formatter.dateFormat = "yyyy年M月"
             return formatter.string(from: selectedDate)
         }
