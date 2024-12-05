@@ -1,1 +1,39 @@
+# Xcode 项目生成的文件
 .DS_Store
+.idea/
+.vscode/
+build/
+DerivedData/
+xcuserdata/
+*.xccheckout
+*.xcworkspace
+*.xcuserstate
+*.xcodeproj/project.xcworkspace/
+
+# CocoaPods
+Pods/
+
+# Carthage
+Carthage/
+
+# Swift Package Manager
+/.build/
+Package.pins
+Package.resolved
+
+# Xcode archive files
+*.xcarchive
+
+# App-specific files
+*.env
+*.secret
+*.keys
+
+# 忽略编译的二进制文件和资源
+*.app
+*.ipa
+*.dSYM
+*.pch
+
+# 其他生成的临时文件
+*.swp
